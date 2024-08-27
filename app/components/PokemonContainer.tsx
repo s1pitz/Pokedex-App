@@ -72,7 +72,7 @@ const PokemonContainer = () => {
   if (loading) {
     return (
       <div className="relative min-h-80 flex items-center justify-center">
-        <span className="loading loading-spinner text-success w-16"></span>
+        <span className="loading loading-spinner text-[#4ead5b] w-16"></span>
       </div>
     );
   }

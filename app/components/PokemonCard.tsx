@@ -38,20 +38,19 @@ const PokemonCard = ({ name, imageUrl, types, url }: PokemonProps) => {
     water: "#93c5fd",
     electric: "#fef08a",
     grass: "#86efac",
-    ice: "#96D9D6",
+    ice: "#a5f3fc",
     fighting: "#f43f5e",
     poison: "#c084fc",
     ground: "#fed7aa",
     flying: "#A98FF3",
-    psychic: "#F95587",
+    psychic: "#f9a8d4",
     bug: "#bef264",
-    rock: "#B6A136",
-    ghost: "#735797",
-    dragon: "#6F35FC",
-    dark: "#705746",
-    steel: "#B7B7CE",
+    rock: "#d0c67d",
+    ghost: "#a088bb",
+    dragon: "#bca8f8",
+    dark: "#b08c73",
+    steel: "#dfdfe5",
     fairy: "#f9a8d4",
-    // ice, psychic rock ghost dragon dark steel yang belum
   };
 
   const getColour = (type: string) => {
