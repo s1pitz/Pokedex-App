@@ -42,6 +42,8 @@ const PokemonContainer = () => {
   const [pokemons, setPokemons] = useState<Pokemon[]>([]);
   const [pokemonData, setPokemonData] = useState<PokemonData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+  const [searchPokemon, setSearchPokemon] = useState<Pokemon[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -68,6 +70,27 @@ const PokemonContainer = () => {
       fetchPokemonDetails();
     }
   }, [pokemons]);
+
+  useEffect(() => {
+    return setSearchPokemon(
+      pokemons.filter((pokemon) =>
+        pokemon.name.toLowerCase().includes(search.toLowerCase())
+      )
+    );
+  }, [search, pokemons]);
+
+  useEffect(() => {
+    const fetchPokemonDetails = async () => {
+      const details = await Promise.all(
+        searchPokemon.map((pokemon) => getPokemonData(pokemon.url))
+      );
+      setLoading(false);
+      setPokemonData(details);
+    };
+    if (searchPokemon.length > 0) {
+      fetchPokemonDetails();
+    }
+  }, [searchPokemon]);
 
   if (loading) {
     return (
@@ -116,11 +139,14 @@ const PokemonContainer = () => {
               id=""
               placeholder="Search Pokemon"
               className="bg-transparent pl-2 focus:outline-none w-80 autofill:bg-red-600"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
             />
           </div>
         </form>
+
         <div
-          className={`mt-10 relative flex flex-row flex-wrap justify-center min-[680px]:justify-evenly z-20 lg:ml-5`}
+          className={`mt-10 relative flex flex-row flex-wrap justify-center min-[680px]:justify-start gap-2 items-center z-20 lg:ml-5`}
         >
           {pokemonData.map((pokemon) => (
             <PokemonCard
@@ -133,70 +159,73 @@ const PokemonContainer = () => {
           ))}
         </div>
       </div>
-      <div className="flex flex-row flex-wrap justify-between lg:mx-7">
-        <div>
-          <svg
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="#000000"
-            className="w-10 h-10 fill-inherit"
-            onClick={() => {
-              setOffset(offset - 20);
-            }}
-          >
-            <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-            <g
-              id="SVGRepo_tracerCarrier"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            ></g>
-            <g id="SVGRepo_iconCarrier">
-              {" "}
-              <polyline
-                fill="none"
-                stroke="#000000"
-                strokeWidth="2"
-                points="7 2 17 12 7 22"
-                transform="matrix(-1 0 0 1 24 0)"
-              ></polyline>{" "}
-            </g>
-          </svg>
+      {search === "" && (
+        <div className="flex flex-row flex-wrap justify-between lg:mx-7">
+          <div>
+            <svg
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="#000000"
+              className="w-10 h-10 fill-inherit"
+              onClick={() => {
+                setOffset(offset - 20);
+              }}
+            >
+              <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+              <g
+                id="SVGRepo_tracerCarrier"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              ></g>
+              <g id="SVGRepo_iconCarrier">
+                {" "}
+                <polyline
+                  fill="none"
+                  stroke="#000000"
+                  strokeWidth="2"
+                  points="7 2 17 12 7 22"
+                  transform="matrix(-1 0 0 1 24 0)"
+                ></polyline>{" "}
+              </g>
+            </svg>
+          </div>
+          <div>
+            <span>Page {offset / 20 + 1}</span>
+          </div>
+
+          <div>
+            <svg
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="#000000"
+              className="w-10 h-10 fill-inherit"
+              onClick={() => {
+                if (offset > 1000) {
+                  setOffset(offset);
+                } else {
+                  setOffset(offset + 20);
+                }
+              }}
+            >
+              <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+              <g
+                id="SVGRepo_tracerCarrier"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              ></g>
+              <g id="SVGRepo_iconCarrier">
+                {" "}
+                <polyline
+                  fill="none"
+                  stroke="#000000"
+                  strokeWidth="2"
+                  points="7 2 17 12 7 22"
+                ></polyline>{" "}
+              </g>
+            </svg>
+          </div>
         </div>
-        <div>
-          <span>Page {offset / 20 + 1}</span>
-        </div>
-        <div>
-          <svg
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="#000000"
-            className="w-10 h-10 fill-inherit"
-            onClick={() => {
-              if (offset > 1000) {
-                setOffset(offset);
-              } else {
-                setOffset(offset + 20);
-              }
-            }}
-          >
-            <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-            <g
-              id="SVGRepo_tracerCarrier"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            ></g>
-            <g id="SVGRepo_iconCarrier">
-              {" "}
-              <polyline
-                fill="none"
-                stroke="#000000"
-                strokeWidth="2"
-                points="7 2 17 12 7 22"
-              ></polyline>{" "}
-            </g>
-          </svg>
-        </div>
-      </div>
+      )}
     </>
   );
 };
