@@ -1,113 +1,148 @@
 import Image from "next/image";
+import { Poppins } from "next/font/google";
+import PokemonContainer from "./components/PokemonContainer";
 
-export default function Home() {
+const poppins = Poppins({
+  weight: ["400", "700"],
+  style: ["normal", "italic"],
+  subsets: ["latin"],
+  display: "swap",
+});
+
+let offset = 0;
+interface Pokemon {
+  name: string;
+  url: string;
+}
+
+export default async function Home() {
+  const res = await fetch(
+    "https://pokeapi.co/api/v2/pokemon?limit=900&offset=0",
+    {
+      cache: "no-store",
+    }
+  );
+  const data = await res.json();
+  const pokemons: Pokemon[] = data.results;
+
+  const getPokemonData = async (url: string) => {
+    const res = await fetch(url, { cache: "no-store" });
+    const data = await res.json();
+    const dataTypes = data.types;
+    let types: string[] = [];
+    if (dataTypes.length > 1) {
+      types.push(dataTypes[0].type.name);
+      types.push(dataTypes[1].type.name);
+    } else {
+      types.push(dataTypes[0].type.name);
+    }
+    const imageUrl = data.sprites.other.home.front_default;
+    return { types, imageUrl };
+  };
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
+    <>
+      <nav className="bg-white max-w-full sticky top-0 z-50">
+        <div className="max-w-screen-xl mx-auto flex flex-wrap items-center flex-row justify-between">
+          <a href="">
             <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
+              src={"/images/logo.png"}
+              alt="Pokemon Logo"
               width={100}
-              height={24}
-              priority
+              height={50}
             />
           </a>
+          <div>
+            <div className="p-4 flex items-center flex-col hover:bg-red-600 hover:text-white hover:fill-white pokedexNav">
+              <svg
+                viewBox="0 0 24 24"
+                fill="#4F4F4F"
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-10 h-10 mb-1 fill-inherit"
+              >
+                <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                <g
+                  id="SVGRepo_tracerCarrier"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                ></g>
+                <g id="SVGRepo_iconCarrier">
+                  <path
+                    d="M21.9012 13H16.8506C16.3873 15.2822 14.3696 17 11.9506 17C9.53167 17 7.51391 15.2822 7.05064 13H2C2.50172 18.0533 6.76528 22 11.9506 22C17.136 22 21.3995 18.0533 21.9012 13Z"
+                    fill="#4F4F4F"
+                    className="fill-inherit"
+                  ></path>
+                  <path
+                    d="M21.9012 11C21.3995 5.94668 17.136 2 11.9506 2C6.76528 2 2.50172 5.94668 2 11H7.05064C7.51391 8.71776 9.53167 7 11.9506 7C14.3696 7 16.3873 8.71776 16.8506 11H21.9012Z"
+                    fill="#4F4F4F"
+                    className="fill-inherit"
+                  ></path>
+                  <path
+                    clipRule="evenodd"
+                    d="M11.9506 15C13.6075 15 14.9506 13.6569 14.9506 12C14.9506 10.3431 13.6075 9 11.9506 9C10.2938 9 8.95062 10.3431 8.95062 12C8.95062 13.6569 10.2938 15 11.9506 15ZM13.4506 12C13.4506 12.8284 12.7791 13.5 11.9506 13.5C11.1222 13.5 10.4506 12.8284 10.4506 12C10.4506 11.1716 11.1222 10.5 11.9506 10.5C12.7791 10.5 13.4506 11.1716 13.4506 12Z"
+                    fill="#4F4F4F"
+                    fillRule="evenodd"
+                    className="fill-inherit"
+                  ></path>
+                </g>
+              </svg>
+              <span className={`${poppins.className} text-inherit`}>
+                Pokédex
+              </span>
+            </div>
+            <div className="w-full bg-red-600 h-1.5 rounded-b-md"></div>
+          </div>
+          <div className="w-[100px]"></div>
         </div>
-      </div>
+      </nav>
 
-      <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
+      <section className="bg-[#313131] w-full p-5 relative">
+        <div
+          className={`${poppins.className} text-gray-100 max-w-screen-xl flex flex-col items-center mx-auto px-1 py-6`}
         >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
+          <span className={`text-inherit text-2xl mb-5`}>
+            Hi, have fun using this website
+          </span>
+          <span className="p-3 w-fit text-inherit text-lg mb-4 bg-[#4ead5b] rounded-xl text-center">
+            The goal of this website is to create a Pokédex that can search
+            specific Pokémon
+          </span>
+          <span className={`text-sm`}>
+            PS: I started this page for learning APIs and{" "}
+            <a href="https://nextjs.org/" className="text-green-600">
+              Next.js
+            </a>
+          </span>
+        </div>
+      </section>
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
+      <main className={`relative w-full overflow-hidden`} id="mainScreen">
+        <div
+          className={`bg-[#313131] w-full px-5 pb-5 relative overflow-hidden`}
         >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-balance text-sm opacity-50">
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+          <div className="max-w-screen-xl mx-auto rounded-md bg-white pt-10 px-5 pb-10">
+            {/* background :) */}
+            <div className={`relative max-w-screen-xl mx-auto z-10`}>
+              <svg
+                width="68"
+                height="52"
+                viewBox="0 0 68 52"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className="absolute w-80 h-80 rounded-tr-xl -top-24 -right-5 z-0"
+              >
+                <path
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  d="M68 0H35.007C35.2717 9.43376 43.0023 17 52.5 17C59.2295 17 65.0719 13.2015 68 7.63169V0ZM68 23.346C63.5414 26.25 58.2177 27.9375 52.5 27.9375C36.9614 27.9375 24.3336 15.4749 24.0668 0H0.00231934C0.270691 28.7647 23.6719 52 52.5 52C57.8955 52 63.1008 51.1861 68 49.6744V23.346Z"
+                  fill="#D9D9D9"
+                />
+              </svg>
+            </div>
+            <PokemonContainer></PokemonContainer>
+          </div>
+        </div>
+      </main>
+    </>
   );
 }
