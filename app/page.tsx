@@ -16,30 +16,6 @@ interface Pokemon {
 }
 
 export default async function Home() {
-  const res = await fetch(
-    "https://pokeapi.co/api/v2/pokemon?limit=900&offset=0",
-    {
-      cache: "no-store",
-    }
-  );
-  const data = await res.json();
-  const pokemons: Pokemon[] = data.results;
-
-  const getPokemonData = async (url: string) => {
-    const res = await fetch(url, { cache: "no-store" });
-    const data = await res.json();
-    const dataTypes = data.types;
-    let types: string[] = [];
-    if (dataTypes.length > 1) {
-      types.push(dataTypes[0].type.name);
-      types.push(dataTypes[1].type.name);
-    } else {
-      types.push(dataTypes[0].type.name);
-    }
-    const imageUrl = data.sprites.other.home.front_default;
-    return { types, imageUrl };
-  };
-
   return (
     <>
       <nav className="bg-white max-w-full sticky top-0 z-50">
