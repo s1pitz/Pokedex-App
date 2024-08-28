@@ -44,6 +44,7 @@ const PokemonContainer = () => {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [searchPokemon, setSearchPokemon] = useState<Pokemon[]>([]);
+  const [isFound, setIsFound] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -80,6 +81,7 @@ const PokemonContainer = () => {
   }, [search, pokemons]);
 
   useEffect(() => {
+    setIsFound(true);
     const fetchPokemonDetails = async () => {
       const details = await Promise.all(
         searchPokemon.map((pokemon) => getPokemonData(pokemon.url))
@@ -89,6 +91,8 @@ const PokemonContainer = () => {
     };
     if (searchPokemon.length > 0) {
       fetchPokemonDetails();
+    } else {
+      setIsFound(false);
     }
   }, [searchPokemon]);
 
@@ -148,15 +152,18 @@ const PokemonContainer = () => {
         <div
           className={`mt-10 relative flex flex-row flex-wrap justify-center min-[680px]:justify-start gap-2 items-center z-20 lg:ml-5`}
         >
-          {pokemonData.map((pokemon) => (
-            <PokemonCard
-              key={pokemon.name}
-              name={pokemon.name}
-              imageUrl={pokemon.imageUrl}
-              types={pokemon.types}
-              url={pokemon.url}
-            ></PokemonCard>
-          ))}
+          {isFound === false && <div>Not Found</div>}
+
+          {isFound === true &&
+            pokemonData.map((pokemon) => (
+              <PokemonCard
+                key={pokemon.name}
+                name={pokemon.name}
+                imageUrl={pokemon.imageUrl}
+                types={pokemon.types}
+                url={pokemon.url}
+              ></PokemonCard>
+            ))}
         </div>
       </div>
       {search === "" && (
