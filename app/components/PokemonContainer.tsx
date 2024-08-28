@@ -22,6 +22,10 @@ interface PokemonData {
   url: string;
 }
 
+interface PokemonProps {
+  allPokemonData: Pokemon[];
+}
+
 const getPokemonData = async (url: string) => {
   const res = await fetch(url, { cache: "no-store" });
   const data = await res.json();
@@ -37,7 +41,7 @@ const getPokemonData = async (url: string) => {
   return { name: data.name, types, imageUrl, url };
 };
 
-const PokemonContainer = () => {
+const PokemonContainer = ({ allPokemonData }: PokemonProps) => {
   const [offset, setOffset] = useState(0);
   const [pokemons, setPokemons] = useState<Pokemon[]>([]);
   const [pokemonData, setPokemonData] = useState<PokemonData[]>([]);
@@ -47,17 +51,11 @@ const PokemonContainer = () => {
   const [isFound, setIsFound] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      const res = await fetch(
-        "https://pokeapi.co/api/v2/pokemon?limit=20&offset=" + offset,
-        { cache: "no-store" }
-      );
-      const data = await res.json();
-      setPokemons(data.results);
-    };
-    fetchData();
-  }, [offset]);
+    setLoading(true);
+
+    let pokemontemp = allPokemonData.slice(offset, offset + 20);
+    setPokemons(pokemontemp);
+  }, [offset, allPokemonData]);
 
   useEffect(() => {
     const fetchPokemonDetails = async () => {
@@ -73,12 +71,11 @@ const PokemonContainer = () => {
   }, [pokemons]);
 
   useEffect(() => {
-    return setSearchPokemon(
-      pokemons.filter((pokemon) =>
-        pokemon.name.toLowerCase().includes(search.toLowerCase())
-      )
+    const searchTemp = allPokemonData.filter((pokemon) =>
+      pokemon.name.toLowerCase().includes(search.toLowerCase())
     );
-  }, [search, pokemons]);
+    setSearchPokemon(searchTemp.slice(0, 20));
+  }, [search, allPokemonData]);
 
   useEffect(() => {
     setIsFound(true);

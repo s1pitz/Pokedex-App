@@ -16,6 +16,13 @@ interface Pokemon {
 }
 
 export default async function Home() {
+  const res = await fetch(
+    "https://pokeapi.co/api/v2/pokemon?limit=1300&offset=0",
+    { cache: "no-store" }
+  );
+  const data = await res.json();
+  const pokemons: Pokemon[] = data.results;
+
   return (
     <>
       <nav className="bg-white max-w-full sticky top-0 z-50">
@@ -115,7 +122,7 @@ export default async function Home() {
                 />
               </svg>
             </div>
-            <PokemonContainer></PokemonContainer>
+            <PokemonContainer allPokemonData={pokemons}></PokemonContainer>
           </div>
         </div>
       </main>

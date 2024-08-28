@@ -79,8 +79,14 @@ const PokemonCard = ({ name, imageUrl, types, url }: PokemonProps) => {
         }}
       >
         <div className="flex flex-col pl-5">
-          <span className={`text-white text-lg font-medium mb-3`}>
-            {name.charAt(0).toUpperCase() + name.slice(1)}
+          <span className={`text-white text-lg font-medium mb-3 relative z-20`}>
+            {name.indexOf("-") == -1 &&
+              name.charAt(0).toUpperCase() + name.slice(1)}
+            {name.indexOf("-") != -1 &&
+              name
+                .split("-")
+                .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+                .join(" ")}
           </span>
 
           <span
@@ -119,7 +125,7 @@ const PokemonCard = ({ name, imageUrl, types, url }: PokemonProps) => {
             />
           </svg>
         </div>
-        <div className="relative">
+        <div className="relative z-10">
           <Image
             src={imageUrl}
             alt={name}
