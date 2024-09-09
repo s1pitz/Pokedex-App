@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import React from "react";
+import DetailBackButton from "@/app/components/DetailBackButton";
 
 const PokemonDetail = async ({ params }: { params: { id: number } }) => {
   const colours = {
@@ -70,7 +71,19 @@ const PokemonDetail = async ({ params }: { params: { id: number } }) => {
     return data;
   }
 
+  async function getSpeciesData(id: number) {
+    const res = await fetch(
+      `https://pokeapi.co/api/v2/pokemon-species/${id}/`,
+      {
+        cache: "no-store",
+      }
+    );
+    const data = await res.json();
+    return data;
+  }
+
   const pokemon = await getData(params.id);
+  const pokemonSpecies = await getSpeciesData(params.id);
 
   return (
     <>
@@ -134,46 +147,96 @@ const PokemonDetail = async ({ params }: { params: { id: number } }) => {
           <div className="max-w-screen-xl mx-auto rounded-md px-4 my-5">
             <span className="text-lg text-white">Pokemon Detail</span>
           </div>
-          <div
-            className="relative min-h-32 max-w-screen-xl mx-auto rounded-md bg-white pb-10 mt-2"
-            style={{
-              backgroundColor: `${getColour(pokemon.types[0].type.name)}`,
-            }}
-          >
-            <div className="absolute z-0">
-              <svg
-                width="114"
-                height="103"
-                viewBox="0 0 114 103"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                style={{
-                  fill: `${getLightColour(pokemon.types[0].type.name)}`,
-                }}
-                className="rounded-md opacity-30"
-              >
-                <path
-                  fillRule="evenodd"
-                  clipRule="evenodd"
-                  d="M0 99.1019C6.98828 102.872 15.4508 103.878 23.592 101.209L92.9613 78.4741C108.706 73.3139 117.286 56.3674 112.126 40.6229L98.8121 0H0V99.1019Z"
-                  fill="#D9D9D9"
-                  className="fill-inherit"
-                />
-              </svg>
-            </div>
-            <div className="relative pt-10 z-10 px-5">
-              <h1>
-                {pokemon.name.indexOf("-") == -1 &&
-                  pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}
-                {pokemon.name.indexOf("-") != -1 &&
-                  pokemon.name
-                    .split("-")
-                    .map(
-                      (part: string) =>
-                        part.charAt(0).toUpperCase() + part.slice(1)
-                    )
-                    .join(" ")}
-              </h1>
+          <div className="relative min-h-32 max-w-screen-xl mx-auto rounded-md pb-10 mt-2 bg-white">
+            <div
+              className="bg-white rounded-t-md"
+              style={{
+                backgroundColor: `${getColour(pokemon.types[0].type.name)}`,
+              }}
+            >
+              <div className="absolute z-0 rounded-md">
+                <svg
+                  width="114"
+                  height="103"
+                  viewBox="0 0 114 103"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  style={{
+                    fill: `${getLightColour(pokemon.types[0].type.name)}`,
+                  }}
+                  className="rounded-md opacity-30"
+                >
+                  <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d="M0 99.1019C6.98828 102.872 15.4508 103.878 23.592 101.209L92.9613 78.4741C108.706 73.3139 117.286 56.3674 112.126 40.6229L98.8121 0H0V99.1019Z"
+                    fill="#D9D9D9"
+                    className="fill-inherit"
+                  />
+                </svg>
+              </div>
+              <div className="relative pt-5 z-10 px-5">
+                <DetailBackButton></DetailBackButton>
+              </div>
+              <div className="w-full relative pt-10 z-10 px-5 md:px-10 flex flex-row justify-between items-end">
+                <span className="font-medium text-3xl text-white">
+                  {pokemon.name.indexOf("-") == -1 &&
+                    pokemon.name.charAt(0).toUpperCase() +
+                      pokemon.name.slice(1)}
+                  {pokemon.name.indexOf("-") != -1 &&
+                    pokemon.name
+                      .split("-")
+                      .map(
+                        (part: string) =>
+                          part.charAt(0).toUpperCase() + part.slice(1)
+                      )
+                      .join(" ")}
+                </span>
+                <div className="text-white font-medium">
+                  {pokemon.id < 10 && <span>#00{pokemon.id}</span>}
+                  {pokemon.id < 100 && pokemon.id > 10 && (
+                    <span>#0{pokemon.id}</span>
+                  )}
+                  {pokemon.id > 100 && <span>#{pokemon.id}</span>}
+                </div>
+              </div>
+              <div className="w-full relative pt-3 z-10 px-5 md:px-10 flex flex-row justify-between">
+                <div className="flex flex-row gap-2">
+                  <span
+                    className={`px-4 py-1 h-7 text-white w-fit text-sm rounded-2xl mb-2`}
+                    style={{
+                      backgroundColor: `${getLightColour(
+                        pokemon.types[0].type.name
+                      )}`,
+                    }}
+                  >
+                    {pokemon.types[0].type.name.charAt(0).toUpperCase() +
+                      pokemon.types[0].type.name.slice(1)}
+                  </span>
+
+                  {pokemon.types.length > 1 && (
+                    <span
+                      className={`px-4 py-1 text-white w-fit text-sm rounded-2xl mb-3`}
+                      style={{
+                        backgroundColor: `${getLightColour(
+                          pokemon.types[0].type.name
+                        )}`,
+                      }}
+                    >
+                      {pokemon.types[1].type.name.charAt(0).toUpperCase() +
+                        pokemon.types[1].type.name.slice(1)}
+                    </span>
+                  )}
+                </div>
+                <div>
+                  <span className="text-white">
+                    {pokemonSpecies.habitat.name.charAt(0).toUpperCase() +
+                      pokemonSpecies.habitat.name.slice(1) +
+                      " "}
+                    Pokémon
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
