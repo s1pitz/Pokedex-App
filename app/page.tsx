@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Poppins } from "next/font/google";
 import PokemonContainer from "./components/PokemonContainer";
+import Link from "next/link";
 
 const poppins = Poppins({
   weight: ["400", "700"],
@@ -27,15 +28,17 @@ export default async function Home() {
     <>
       <nav className="bg-white max-w-full sticky top-0 z-50">
         <div className="max-w-screen-xl mx-auto flex flex-wrap items-center flex-row justify-between">
-          <a href="">
+          <Link href="/" as={"image"}>
             <Image
               src={"/images/logo.png"}
               alt="Pokemon Logo"
               width={100}
-              height={50}
+              height={62}
+              priority={false}
+              className="w-[100px] h-auto"
             />
-          </a>
-          <div>
+          </Link>
+          <Link href="" className="">
             <div className="p-4 flex items-center flex-col hover:bg-red-600 hover:text-white hover:fill-white pokedexNav">
               <svg
                 viewBox="0 0 24 24"
@@ -74,7 +77,7 @@ export default async function Home() {
               </span>
             </div>
             <div className="w-full bg-red-600 h-1.5 rounded-b-md"></div>
-          </div>
+          </Link>
           <div className="w-[100px]"></div>
         </div>
       </nav>

@@ -1,0 +1,15 @@
+.nothover:hover > :not(:hover){
+    scale: 0.905;
+    opacity: 0.8;
+    transition-duration: 300ms;
+    transition-timing-function: ease-in;
+}
+
+.autofillRemover{
+    -webkit-box-shadow: 0 0 0px 1000px #F4F4F4 inset !important;
+    box-shadow: 0 0 0px 1000px #F4F4F4 inset !important;
+}
+
+.autofillRemover:-webkit-autofill {
+    -webkit-text-fill-color: #000;
+}

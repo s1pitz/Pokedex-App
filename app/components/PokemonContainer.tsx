@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import PokemonCard from "./PokemonCard";
 import { Poppins } from "next/font/google";
+import styles from "./PokemonCard.module.css";
 
 const poppins = Poppins({
   weight: ["400", "700"],
@@ -20,6 +21,7 @@ interface PokemonData {
   imageUrl: string;
   types: string[];
   url: string;
+  id: number;
 }
 
 interface PokemonProps {
@@ -29,6 +31,7 @@ interface PokemonProps {
 const getPokemonData = async (url: string) => {
   const res = await fetch(url, { cache: "no-store" });
   const data = await res.json();
+  const dataID = data.id;
   const dataTypes = data.types;
   let types: string[] = [];
   if (dataTypes.length > 1) {
@@ -38,7 +41,7 @@ const getPokemonData = async (url: string) => {
     types.push(dataTypes[0].type.name);
   }
   const imageUrl = data.sprites.other.home.front_default;
-  return { name: data.name, types, imageUrl, url };
+  return { name: data.name, types, imageUrl, url, id: dataID };
 };
 
 const PokemonContainer = ({ allPokemonData }: PokemonProps) => {
@@ -139,7 +142,7 @@ const PokemonContainer = ({ allPokemonData }: PokemonProps) => {
               name="name"
               id=""
               placeholder="Search Pokemon"
-              className="bg-transparent pl-2 focus:outline-none w-80 autofill:bg-red-600"
+              className={`${styles.autofillRemover} bg-transparent pl-2 focus:outline-none w-80 autofill:text-black`}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
@@ -147,7 +150,7 @@ const PokemonContainer = ({ allPokemonData }: PokemonProps) => {
         </form>
 
         <div
-          className={`mt-10 relative flex flex-row flex-wrap justify-center min-[680px]:justify-start gap-2 items-center z-20 lg:ml-5`}
+          className={` ${styles.nothover} transition-transform duration-300 ease-in-out mt-10 relative flex flex-row flex-wrap justify-center min-[680px]:justify-start gap-2 items-center z-20 lg:ml-5`}
         >
           {isFound === false && <div>Not Found</div>}
 
@@ -159,6 +162,7 @@ const PokemonContainer = ({ allPokemonData }: PokemonProps) => {
                 imageUrl={pokemon.imageUrl}
                 types={pokemon.types}
                 url={pokemon.url}
+                id={pokemon.id}
               ></PokemonCard>
             ))}
         </div>

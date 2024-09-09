@@ -1,16 +1,17 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import { get } from "http";
+import Link from "next/link";
 
 interface PokemonProps {
   name: string;
   imageUrl: string;
   types: string[];
   url: string;
+  id: number;
 }
 
-const PokemonCard = ({ name, imageUrl, types, url }: PokemonProps) => {
+const PokemonCard = ({ name, imageUrl, types, url, id }: PokemonProps) => {
   const colours = {
     normal: "#A8A77A",
     fire: "#ef4444",
@@ -71,12 +72,10 @@ const PokemonCard = ({ name, imageUrl, types, url }: PokemonProps) => {
 
   return (
     <>
-      <div
-        className={`flex flex-col w-72 h-40 rounded-lg pt-5 mb-10 hover:scale-105 transition-transform duration-300 ease-in-out`}
+      <Link
+        href={`/pokemon/${id}`}
+        className={` flex flex-col w-72 h-40 rounded-lg pt-5 mb-10 hover:scale-105 transition-transform duration-300 ease-in-out`}
         style={{ backgroundColor: `${getColour(types[0])}` }}
-        onClick={() => {
-          console.log(name);
-        }}
       >
         <div className="flex flex-col pl-5">
           <span className={`text-white text-lg font-medium mb-3 relative z-20`}>
@@ -131,10 +130,10 @@ const PokemonCard = ({ name, imageUrl, types, url }: PokemonProps) => {
             alt={name}
             width={145}
             height={145}
-            className="absolute right-3 -bottom-4"
+            className={`absolute right-3 -bottom-4`}
           />
         </div>
-      </div>
+      </Link>
       <div></div>
     </>
   );
