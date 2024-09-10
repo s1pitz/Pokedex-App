@@ -18,7 +18,7 @@ interface Pokemon {
 
 export default async function Home() {
   const res = await fetch(
-    "https://pokeapi.co/api/v2/pokemon?limit=1300&offset=0",
+    "https://pokeapi.co/api/v2/pokemon?limit=10000&offset=0",
     { cache: "no-store" }
   );
   const data = await res.json();

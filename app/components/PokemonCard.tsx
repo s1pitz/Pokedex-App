@@ -125,13 +125,15 @@ const PokemonCard = ({ name, imageUrl, types, url, id }: PokemonProps) => {
           </svg>
         </div>
         <div className="relative z-10">
-          <Image
-            src={imageUrl}
-            alt={name}
-            width={145}
-            height={145}
-            className={`absolute right-3 -bottom-4`}
-          />
+          {imageUrl && (
+            <Image
+              src={imageUrl}
+              alt={name}
+              width={145}
+              height={145}
+              className={`absolute right-3 -bottom-4`}
+            />
+          )}
         </div>
       </Link>
       <div></div>

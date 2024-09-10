@@ -64,26 +64,30 @@ const PokemonDetail = async ({ params }: { params: { id: number } }) => {
   };
 
   async function getData(id: number) {
-    const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}/`, {
+    const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`, {
       cache: "no-store",
     });
     const data = await res.json();
     return data;
   }
 
-  async function getSpeciesData(id: number) {
-    const res = await fetch(
-      `https://pokeapi.co/api/v2/pokemon-species/${id}/`,
-      {
-        cache: "no-store",
-      }
-    );
+  async function getSpeciesData(speciesUrl: string) {
+    const res = await fetch(speciesUrl, {
+      cache: "no-store",
+    });
     const data = await res.json();
     return data;
   }
 
   const pokemon = await getData(params.id);
-  const pokemonSpecies = await getSpeciesData(params.id);
+  const pokemonSpecies = await getSpeciesData(pokemon.species.url);
+  let imageUrl = pokemon.sprites.other.home.front_default;
+  if (imageUrl === null) {
+    imageUrl = pokemon.sprites.front_default;
+    if (imageUrl === null) {
+      imageUrl = pokemon.sprites.other["official-artwork"].front_default;
+    }
+  }
 
   return (
     <>
@@ -147,13 +151,13 @@ const PokemonDetail = async ({ params }: { params: { id: number } }) => {
           <div className="max-w-screen-xl mx-auto rounded-md px-4 my-5">
             <span className="text-lg text-white">Pokemon Detail</span>
           </div>
-          <div className="relative min-h-32 max-w-screen-xl mx-auto rounded-md pb-10 mt-2 bg-white">
-            <div
-              className="bg-white rounded-t-md"
-              style={{
-                backgroundColor: `${getColour(pokemon.types[0].type.name)}`,
-              }}
-            >
+          <div
+            className="relative max-w-screen-xl mx-auto rounded-md pb-10 mt-2 bg-white"
+            style={{
+              backgroundColor: `${getColour(pokemon.types[0].type.name)}`,
+            }}
+          >
+            <div className="min-h-72 rounded-t-md">
               <div className="absolute z-0 rounded-md">
                 <svg
                   width="114"
@@ -230,13 +234,36 @@ const PokemonDetail = async ({ params }: { params: { id: number } }) => {
                 </div>
                 <div>
                   <span className="text-white">
-                    {pokemonSpecies.habitat.name.charAt(0).toUpperCase() +
-                      pokemonSpecies.habitat.name.slice(1) +
-                      " "}
-                    Pokémon
+                    {pokemonSpecies.habitat == null && "Unknown Habitat"}
+                    {pokemonSpecies.habitat != null &&
+                      pokemonSpecies.habitat.name.indexOf("-") == -1 &&
+                      pokemonSpecies.habitat.name.charAt(0).toUpperCase() +
+                        pokemonSpecies.habitat.name.slice(1) +
+                        " Pokémon"}
+                    {pokemonSpecies.habitat != null &&
+                      pokemonSpecies.habitat.name.indexOf("-") != -1 &&
+                      pokemonSpecies.habitat.name
+                        .split("-")
+                        .map(
+                          (part: string) =>
+                            part.charAt(0).toUpperCase() + part.slice(1)
+                        )
+                        .join(" ") + " Pokémon"}
                   </span>
                 </div>
               </div>
+              <div className="relative flex flex-wrap justify-center items-start">
+                <Image
+                  src={imageUrl}
+                  width={200}
+                  height={200}
+                  alt={pokemon.name}
+                  className="absolute z-20 -bottom-32"
+                ></Image>
+              </div>
+            </div>
+            <div className="min-h-96 relative w-full rounded-3xl bg-white">
+              asdsafs
             </div>
           </div>
         </div>

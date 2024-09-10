@@ -31,7 +31,7 @@ interface PokemonProps {
 const getPokemonData = async (url: string) => {
   const res = await fetch(url, { cache: "no-store" });
   const data = await res.json();
-  const dataID = data.id;
+  const dataID: number = data.id;
   const dataTypes = data.types;
   let types: string[] = [];
   if (dataTypes.length > 1) {
@@ -40,7 +40,13 @@ const getPokemonData = async (url: string) => {
   } else {
     types.push(dataTypes[0].type.name);
   }
-  const imageUrl = data.sprites.other.home.front_default;
+  let imageUrl = data.sprites.other.home.front_default;
+  if (imageUrl === null) {
+    imageUrl = data.sprites.front_default;
+    if (imageUrl === null) {
+      imageUrl = data.sprites.other["official-artwork"].front_default;
+    }
+  }
   return { name: data.name, types, imageUrl, url, id: dataID };
 };
 
