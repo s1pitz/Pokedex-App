@@ -28,7 +28,7 @@ export default async function Home() {
     <>
       <nav className="bg-white max-w-full sticky top-0 z-50">
         <div className="max-w-screen-xl mx-auto flex flex-wrap items-center flex-row justify-between">
-          <Link href="/" as={"image"}>
+          <Link href="" as={"image"}>
             <Image
               src={"/images/logo.png"}
               alt="Pokemon Logo"
