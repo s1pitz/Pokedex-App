@@ -28,6 +28,20 @@ interface PokemonProps {
   allPokemonData: Pokemon[];
 }
 
+const getPokemonOtherImage = async (url: string) => {
+  const res = await fetch(url, { cache: "no-store" });
+  const data = await res.json();
+  const id = data.id;
+
+  const res2 = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`, {
+    cache: "no-store",
+  });
+  const data2 = await res2.json();
+  const imageUrl = data2.sprites.front_default;
+
+  return imageUrl;
+};
+
 const getPokemonData = async (url: string) => {
   const res = await fetch(url, { cache: "no-store" });
   const data = await res.json();
@@ -45,8 +59,12 @@ const getPokemonData = async (url: string) => {
     imageUrl = data.sprites.front_default;
     if (imageUrl === null) {
       imageUrl = data.sprites.other["official-artwork"].front_default;
+      if (imageUrl == null) {
+        imageUrl = await getPokemonOtherImage(data.species.url);
+      }
     }
   }
+
   return { name: data.name, types, imageUrl, url, id: dataID };
 };
 
@@ -182,7 +200,11 @@ const PokemonContainer = ({ allPokemonData }: PokemonProps) => {
               fill="#000000"
               className="w-10 h-10 fill-inherit"
               onClick={() => {
-                setOffset(offset - 20);
+                if (offset == 0) {
+                  setOffset(1300);
+                } else {
+                  setOffset(offset - 20);
+                }
               }}
             >
               <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
@@ -214,8 +236,8 @@ const PokemonContainer = ({ allPokemonData }: PokemonProps) => {
               fill="#000000"
               className="w-10 h-10 fill-inherit"
               onClick={() => {
-                if (offset > 1000) {
-                  setOffset(offset);
+                if (offset == 1300) {
+                  setOffset(0);
                 } else {
                   setOffset(offset + 20);
                 }

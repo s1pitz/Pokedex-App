@@ -81,6 +81,23 @@ const PokemonDetail = async ({ params }: { params: { id: number } }) => {
 
   const pokemon = await getData(params.id);
   const pokemonSpecies = await getSpeciesData(pokemon.species.url);
+
+  function getPokemonStatus() {
+    if (pokemonSpecies.is_legendary != false) {
+      return "Legendary";
+    }
+
+    if (pokemonSpecies.is_mythical != false) {
+      return "Mythical";
+    }
+    if (pokemonSpecies.is_baby != false) {
+      return "Baby";
+    }
+    return null;
+  }
+
+  let pokemonStatus = getPokemonStatus();
+
   let imageUrl = pokemon.sprites.other.home.front_default;
   if (imageUrl === null) {
     imageUrl = pokemon.sprites.front_default;
@@ -144,15 +161,16 @@ const PokemonDetail = async ({ params }: { params: { id: number } }) => {
           <div className="w-[100px]"></div>
         </div>
       </nav>
+
       <main className={`relative w-full overflow-hidden`} id="mainScreen">
         <div
-          className={`bg-[#313131] w-full px-5 pb-5 relative overflow-hidden h-full`}
+          className={`bg-[#313131] w-full px-5 pb-5 relative overflow-hidden`}
         >
           <div className="max-w-screen-xl mx-auto rounded-md px-4 my-5">
             <span className="text-lg text-white">Pokemon Detail</span>
           </div>
           <div
-            className="relative max-w-screen-xl mx-auto rounded-md pb-10 mt-2 bg-white"
+            className="relative max-w-screen-xl mx-auto rounded-md pb-10 mt-2"
             style={{
               backgroundColor: `${getColour(pokemon.types[0].type.name)}`,
             }}
@@ -179,8 +197,15 @@ const PokemonDetail = async ({ params }: { params: { id: number } }) => {
                   />
                 </svg>
               </div>
-              <div className="relative pt-5 z-10 px-5">
-                <DetailBackButton></DetailBackButton>
+              <div className="relative mt-2 pt-5 z-10 px-5 w-full flex flex-row justify-between items-center">
+                <div>
+                  <DetailBackButton></DetailBackButton>
+                </div>
+                <div className="text-white text-xl">
+                  {getPokemonStatus() != null &&
+                    getPokemonStatus() + " Pokémon"}
+                </div>
+                <div className="w-10"></div>
               </div>
               <div className="w-full relative pt-10 z-10 px-5 md:px-10 flex flex-row justify-between items-end">
                 <span className="font-medium text-3xl text-white">
@@ -262,8 +287,8 @@ const PokemonDetail = async ({ params }: { params: { id: number } }) => {
                 ></Image>
               </div>
             </div>
-            <div className="min-h-96 relative w-full rounded-3xl bg-white">
-              asdsafs
+            <div className="min-h-96 relative w-full rounded-3xl bg-white px-5 md:px-10 py-7">
+              Little navigation Info Base Stats Evolution Moves
             </div>
           </div>
         </div>
