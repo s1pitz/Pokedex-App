@@ -2,6 +2,8 @@ import Link from "next/link";
 import Image from "next/image";
 import React from "react";
 import DetailBackButton from "@/app/components/DetailBackButton";
+import styles from "./PokemonDetail.module.css";
+import PokemonDetailContainer from "@/app/components/PokemonDetailContainer";
 
 const PokemonDetail = async ({ params }: { params: { id: number } }) => {
   const colours = {
@@ -79,6 +81,20 @@ const PokemonDetail = async ({ params }: { params: { id: number } }) => {
     return data;
   }
 
+  const getPokemonOtherImage = async (url: string) => {
+    const res = await fetch(url, { cache: "no-store" });
+    const data = await res.json();
+    const id = data.id;
+
+    const res2 = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`, {
+      cache: "no-store",
+    });
+    const data2 = await res2.json();
+    const imageUrl = data2.sprites.front_default;
+
+    return imageUrl;
+  };
+
   const pokemon = await getData(params.id);
   const pokemonSpecies = await getSpeciesData(pokemon.species.url);
 
@@ -103,8 +119,14 @@ const PokemonDetail = async ({ params }: { params: { id: number } }) => {
     imageUrl = pokemon.sprites.front_default;
     if (imageUrl === null) {
       imageUrl = pokemon.sprites.other["official-artwork"].front_default;
+      if (imageUrl === null) {
+        imageUrl = await getPokemonOtherImage(pokemon.species.url);
+      }
     }
   }
+
+  let lightColor = getLightColour(pokemon.types[0].type.name) || "#ffffff";
+  let darkColor = getColour(pokemon.types[0].type.name) || "#000000";
 
   return (
     <>
@@ -208,7 +230,9 @@ const PokemonDetail = async ({ params }: { params: { id: number } }) => {
                 <div className="w-10"></div>
               </div>
               <div className="w-full relative pt-10 z-10 px-5 md:px-10 flex flex-row justify-between items-end">
-                <span className="font-medium text-3xl text-white">
+                <span
+                  className={`font-medium text-3xl text-white ${styles.clamp}`}
+                >
                   {pokemon.name.indexOf("-") == -1 &&
                     pokemon.name.charAt(0).toUpperCase() +
                       pokemon.name.slice(1)}
@@ -283,12 +307,16 @@ const PokemonDetail = async ({ params }: { params: { id: number } }) => {
                   width={200}
                   height={200}
                   alt={pokemon.name}
-                  className="absolute z-20 -bottom-32"
+                  className="relative z-20"
                 ></Image>
               </div>
             </div>
             <div className="min-h-96 relative w-full rounded-3xl bg-white px-5 md:px-10 py-7">
-              Little navigation Info Base Stats Evolution Moves
+              <PokemonDetailContainer
+                pokemon={pokemon}
+                lightColor={lightColor}
+                darkColor={darkColor}
+              ></PokemonDetailContainer>
             </div>
           </div>
         </div>

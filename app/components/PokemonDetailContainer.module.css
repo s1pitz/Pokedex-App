@@ -1,0 +1,50 @@
+.littleNavbar{
+    position: relative;
+    cursor: pointer;
+}
+
+.navbarAnimation{
+    transition: color 0.3 ease;
+}
+
+.littleNavbar::before{
+    content: "";
+    position: absolute;
+    width: 0px;
+    height: 3px;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--dark-color);
+    visibility: hidden;
+    transition: all 0.3s ease-in-out 0s;
+}
+
+.littleNavbar:hover:before{
+    visibility: visible;
+    width: 100%;
+}
+
+.littleNavbarActive{
+    position: relative;
+    color: var(--dark-color);
+    cursor: pointer;
+}
+
+.littleNavbarActive::before{
+    content: "";
+    position: absolute;
+    width: 0px;
+    height: 3px;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--dark-color);
+    visibility: hidden;
+    transition: all 0.3s ease-in-out 0s;
+}
+
+.littleNavbarActive:hover:before{
+    visibility: visible;
+    width: 100%;
+}
