@@ -4,7 +4,7 @@ import React from "react";
 const DetailBackButton = () => {
   return (
     <>
-      <Link href={`../`}>
+      <Link href={"../"}>
         <svg
           fill="#FFFFFF"
           version="1.1"

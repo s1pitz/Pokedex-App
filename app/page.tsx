@@ -110,12 +110,12 @@ export default async function Home() {
             {/* background :) */}
             <div className={`relative max-w-screen-xl mx-auto z-10`}>
               <svg
-                width="68"
-                height="52"
+                width="340"
+                height="260"
                 viewBox="0 0 68 52"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                className="absolute w-80 h-80 rounded-tr-xl -top-24 -right-5 z-0"
+                className="absolute -top-12 rounded-tr-3xl -right-5 z-0 "
               >
                 <path
                   fillRule="evenodd"

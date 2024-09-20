@@ -2,6 +2,10 @@
 import React from "react";
 import styles from "./PokemonDetailContainer.module.css";
 import { useState } from "react";
+import DetailAbout from "./About/About";
+import DetailBaseStats from "./Evolution/DetailEvolution";
+import DetailEvolution from "./BaseStats/DetailBaseStats";
+import DetailMoves from "./Moves/DetailMoves";
 
 interface PokemonDetailContainerProps {
   pokemon: any;
@@ -15,6 +19,7 @@ const PokemonDetailContainer: React.FC<PokemonDetailContainerProps> = ({
   darkColor,
 }: PokemonDetailContainerProps) => {
   const [nav, setNav] = React.useState("About");
+
   console.log(nav);
   return (
     <>
@@ -122,6 +127,12 @@ const PokemonDetailContainer: React.FC<PokemonDetailContainerProps> = ({
             Moves
           </div>
         )}
+      </div>
+      <div className="mt-3">
+        {nav === "About" && <DetailAbout></DetailAbout>}
+        {nav === "Base Stats" && <DetailBaseStats></DetailBaseStats>}
+        {nav === "Evolution" && <DetailEvolution></DetailEvolution>}
+        {nav === "Moves" && <DetailMoves></DetailMoves>}
       </div>
     </>
   );

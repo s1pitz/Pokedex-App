@@ -1,0 +1,15 @@
+{pokemonSpecies.habitat == null && "Unknown Habitat"}
+                    {pokemonSpecies.habitat != null &&
+                      pokemonSpecies.habitat.name.indexOf("-") == -1 &&
+                      pokemonSpecies.habitat.name.charAt(0).toUpperCase() +
+                        pokemonSpecies.habitat.name.slice(1) +
+                        " Pokémon"}
+                    {pokemonSpecies.habitat != null &&
+                      pokemonSpecies.habitat.name.indexOf("-") != -1 &&
+                      pokemonSpecies.habitat.name
+                        .split("-")
+                        .map(
+                          (part: string) =>
+                            part.charAt(0).toUpperCase() + part.slice(1)
+                        )
+                        .join(" ") + " Pokémon"}

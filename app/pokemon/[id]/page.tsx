@@ -1,9 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import React from "react";
-import DetailBackButton from "@/app/components/DetailBackButton";
+import DetailBackButton from "@/app/components/Detail/DetailBackButton";
 import styles from "./PokemonDetail.module.css";
-import PokemonDetailContainer from "@/app/components/PokemonDetailContainer";
+import PokemonDetailContainer from "@/app/components/Detail/PokemonDetailContainer";
 
 const PokemonDetail = async ({ params }: { params: { id: number } }) => {
   const colours = {
@@ -112,6 +112,13 @@ const PokemonDetail = async ({ params }: { params: { id: number } }) => {
     return null;
   }
 
+  function findEnglishGenus() {
+    let englishGenus = pokemonSpecies.genera.find(
+      (genus: any) => genus.language.name === "en"
+    );
+    return englishGenus.genus;
+  }
+
   let pokemonStatus = getPokemonStatus();
 
   let imageUrl = pokemon.sprites.other.home.front_default;
@@ -188,11 +195,11 @@ const PokemonDetail = async ({ params }: { params: { id: number } }) => {
         <div
           className={`bg-[#313131] w-full px-5 pb-5 relative overflow-hidden`}
         >
-          <div className="max-w-screen-xl mx-auto rounded-md px-4 my-5">
+          <div className="max-w-screen-xl mx-auto px-4 my-5">
             <span className="text-lg text-white">Pokemon Detail</span>
           </div>
           <div
-            className="relative max-w-screen-xl mx-auto rounded-md pb-10 mt-2"
+            className="relative max-w-screen-xl mx-auto rounded-t-3xl rounded-b-3xl mt-2"
             style={{
               backgroundColor: `${getColour(pokemon.types[0].type.name)}`,
             }}
@@ -208,7 +215,7 @@ const PokemonDetail = async ({ params }: { params: { id: number } }) => {
                   style={{
                     fill: `${getLightColour(pokemon.types[0].type.name)}`,
                   }}
-                  className="rounded-md opacity-30"
+                  className="rounded-tl-3xl opacity-30"
                 >
                   <path
                     fillRule="evenodd"
@@ -283,25 +290,31 @@ const PokemonDetail = async ({ params }: { params: { id: number } }) => {
                 </div>
                 <div>
                   <span className="text-white">
-                    {pokemonSpecies.habitat == null && "Unknown Habitat"}
-                    {pokemonSpecies.habitat != null &&
-                      pokemonSpecies.habitat.name.indexOf("-") == -1 &&
-                      pokemonSpecies.habitat.name.charAt(0).toUpperCase() +
-                        pokemonSpecies.habitat.name.slice(1) +
-                        " Pokémon"}
-                    {pokemonSpecies.habitat != null &&
-                      pokemonSpecies.habitat.name.indexOf("-") != -1 &&
-                      pokemonSpecies.habitat.name
-                        .split("-")
-                        .map(
-                          (part: string) =>
-                            part.charAt(0).toUpperCase() + part.slice(1)
-                        )
-                        .join(" ") + " Pokémon"}
+                    {pokemonSpecies.genera !== undefined && findEnglishGenus()}
                   </span>
                 </div>
               </div>
               <div className="relative flex flex-wrap justify-center items-start">
+                <div className="absolute -bottom-4">
+                  <svg
+                    width="105"
+                    height="105"
+                    viewBox="0 0 105 105"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-40 h-40 opacity-30"
+                    style={{
+                      fill: `${getLightColour(pokemon.types[0].type.name)}`,
+                    }}
+                  >
+                    <circle cx="52.5" cy="52.5" r="17.5" fill="fill-inherit" />
+                    <path
+                      fillRule="evenodd"
+                      clipRule="evenodd"
+                      d="M104.77 56H80.6094C78.8845 70.0544 66.9058 80.9375 52.3852 80.9375C37.8646 80.9375 25.8859 70.0544 24.1609 56H0C1.80105 83.3631 24.5663 105 52.3852 105C80.204 105 102.969 83.3631 104.77 56ZM104.77 49C102.969 21.6369 80.204 0 52.3852 0C24.5663 0 1.80105 21.6369 0 49H24.1609C25.8859 34.9456 37.8646 24.0625 52.3852 24.0625C66.9058 24.0625 78.8845 34.9456 80.6094 49H104.77Z"
+                      fill="fill-inherit"
+                    />
+                  </svg>
+                </div>
                 <Image
                   src={imageUrl}
                   width={200}

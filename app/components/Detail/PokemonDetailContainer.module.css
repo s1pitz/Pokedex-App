@@ -18,6 +18,7 @@
     background-color: var(--dark-color);
     visibility: hidden;
     transition: all 0.3s ease-in-out 0s;
+    border-radius: 3px;
 }
 
 .littleNavbar:hover:before{
@@ -42,6 +43,7 @@
     background-color: var(--dark-color);
     visibility: hidden;
     transition: all 0.3s ease-in-out 0s;
+    border-radius: 3px;
 }
 
 .littleNavbarActive:hover:before{
