@@ -1,5 +1,7 @@
 import React from "react";
 import styles from "./About.module.css";
+import PlayButton from "./PlayButton";
+import PauseButton from "./PauseButton";
 interface ability {
   name: string;
   is_hidden: boolean;
@@ -19,6 +21,7 @@ interface PokemonDetailAboutProps {
   shape: string;
   varieties: variety[];
   baseExperience: number;
+  darkColor: string;
 }
 
 const DetailAbout = ({
@@ -31,6 +34,7 @@ const DetailAbout = ({
   shape,
   varieties,
   baseExperience,
+  darkColor,
 }: PokemonDetailAboutProps) => {
   function convertToFoot(n: number) {
     let temp = [];
@@ -42,7 +46,7 @@ const DetailAbout = ({
     temp.push(feet, inches);
     return temp;
   }
-  console.log(convertToFoot(90));
+
   return (
     <>
       <div className="">
@@ -50,8 +54,8 @@ const DetailAbout = ({
         <div className="text-base">{flavorText}</div>
       </div>
 
-      <div className="flex flex-row justify-between flex-wrap my-4">
-        <div className="w-1/2">
+      <div className={`grid ${styles.grid2Columns} my-4`}>
+        <div className="">
           <div className="font-bold">Basic Information</div>
           <div
             className={`my-2 py-3 px-6 rounded-2xl flex flex-row justify-between items-center ${styles.box}`}
@@ -82,13 +86,44 @@ const DetailAbout = ({
             </div>
           </div>
         </div>
-        <div className="w-1/2">
-          <div>Cries</div>
+        <div className="">
+          <div className="font-bold">Cries</div>
           <div
-            className={`my-2 py-3 px-6 rounded-2xl flex flex-row justify-between items-center ${styles.box}`}
+            className={`my-2 py-3 px-6 rounded-2xl flex flex-row justify-evenly max-[915px]:justify-start max-[915px]:gap-16 ${styles.box}`}
           >
-            <div>1</div>
-            <div>2</div>
+            <div className="flex flex-col ">
+              <div
+                className="border rounded-xl flex flex-row"
+                style={{ backgroundColor: `${darkColor}` }}
+              >
+                <div className="flex flex-row gap-2 py-2 px-3">
+                  <PlayButton cries={cries[0]} />
+                  <PauseButton cries={cries[0]} />
+                  <span className="text-white font-normal text-lg">Latest</span>
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-col">
+              {cries[1] === "No legacy cry" && (
+                <span className="text-gray-500 font-normal">
+                  There is No Legacy Cry
+                </span>
+              )}
+              {cries[1] !== "No legacy cry" && (
+                <div
+                  className="border rounded-xl flex flex-row"
+                  style={{ backgroundColor: `${darkColor}` }}
+                >
+                  <div className="flex flex-row gap-2 py-2 px-3">
+                    <PlayButton cries={cries[1]} />
+                    <PauseButton cries={cries[1]} />
+                    <span className="text-white font-normal text-lg">
+                      Legacy
+                    </span>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

@@ -227,6 +227,7 @@ const PokemonDetailContainer: React.FC<PokemonDetailContainerProps> = ({
             cries={getCries(pokemon.cries)}
             eggGroups={getEggs(species.egg_groups)}
             flavorText={getflavorTexts(species.flavor_text_entries)}
+            darkColor={darkColor}
           ></DetailAbout>
         )}
         {nav === "Base Stats" && <DetailBaseStats></DetailBaseStats>}

@@ -1,3 +1,24 @@
 .box{
     box-shadow: 0px 10px 40px -15px grey;
 }
+
+.grid2Columns{
+    grid-template-columns: minmax(440px, 60%) minmax(360px, 35%);
+    justify-content: space-between;
+    flex-wrap: wrap;
+    column-gap: 20px;
+}
+
+@media (max-width: 915px){
+    .grid2Columns{
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px){
+    .box{
+        gap: 0px;
+        justify-content: space-between;
+        overflow: hidden;
+    }
+}
