@@ -137,7 +137,7 @@ const PokemonContainer = ({ allPokemonData }: PokemonProps) => {
           What Pokémon are you looking for?
         </span>
         <form action="" method="POST">
-          <div className="py-3 px-5 flex flex-row bg-[#F4F4F4] rounded-full w-max lg:ml-5">
+          <div className="py-3 px-5 flex flex-row bg-[#F4F4F4] rounded-full lg:ml-5 w-full min-[387px]:w-80">
             <svg
               viewBox="0 0 24 24"
               fill="none"
@@ -166,7 +166,7 @@ const PokemonContainer = ({ allPokemonData }: PokemonProps) => {
               name="name"
               id=""
               placeholder="Search Pokemon"
-              className={`${styles.autofillRemover} bg-transparent pl-2 focus:outline-none w-80 autofill:text-black`}
+              className={`${styles.autofillRemover} bg-transparent pl-2 focus:outline-none autofill:text-black`}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />

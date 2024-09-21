@@ -119,8 +119,6 @@ const PokemonDetail = async ({ params }: { params: { id: number } }) => {
     return englishGenus.genus;
   }
 
-  let pokemonStatus = getPokemonStatus();
-
   let imageUrl = pokemon.sprites.other.home.front_default;
   if (imageUrl === null) {
     imageUrl = pokemon.sprites.front_default;
@@ -238,7 +236,7 @@ const PokemonDetail = async ({ params }: { params: { id: number } }) => {
               </div>
               <div className="w-full relative pt-10 z-10 px-5 md:px-10 flex flex-row justify-between items-end">
                 <span
-                  className={`font-medium text-3xl text-white ${styles.clamp}`}
+                  className={`font-medium text-4xl text-white ${styles.clamp}`}
                 >
                   {pokemon.name.indexOf("-") == -1 &&
                     pokemon.name.charAt(0).toUpperCase() +
@@ -327,6 +325,7 @@ const PokemonDetail = async ({ params }: { params: { id: number } }) => {
             <div className="min-h-96 relative w-full rounded-3xl bg-white px-5 md:px-10 py-7">
               <PokemonDetailContainer
                 pokemon={pokemon}
+                species={pokemonSpecies}
                 lightColor={lightColor}
                 darkColor={darkColor}
               ></PokemonDetailContainer>
