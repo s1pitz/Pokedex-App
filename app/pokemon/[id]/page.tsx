@@ -322,7 +322,7 @@ const PokemonDetail = async ({ params }: { params: { id: number } }) => {
                 ></Image>
               </div>
             </div>
-            <div className="min-h-96 relative w-full rounded-3xl bg-white px-5 md:px-10 py-7">
+            <div className="min-h-96 relative w-full rounded-3xl bg-white px-5 md:px-10 py-7 overflow-hidden">
               <PokemonDetailContainer
                 pokemon={pokemon}
                 species={pokemonSpecies}

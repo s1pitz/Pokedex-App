@@ -218,6 +218,7 @@ const PokemonDetailContainer: React.FC<PokemonDetailContainerProps> = ({
       <div className="">
         {nav === "About" && (
           <DetailAbout
+            genderRate={species.gender_rate}
             baseExperience={pokemon.base_experience}
             weight={pokemon.weight}
             height={pokemon.height}
