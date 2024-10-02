@@ -5,6 +5,12 @@ import DetailBackButton from "@/app/components/Detail/DetailBackButton";
 import styles from "./PokemonDetail.module.css";
 import PokemonDetailContainer from "@/app/components/Detail/PokemonDetailContainer";
 
+interface Ability {
+  name: string;
+  is_hidden: boolean;
+  description: string;
+}
+
 const PokemonDetail = async ({ params }: { params: { id: number } }) => {
   const colours = {
     normal: "#A8A77A",
@@ -65,6 +71,39 @@ const PokemonDetail = async ({ params }: { params: { id: number } }) => {
     }
   };
 
+  const getDescription = async (url: string) => {
+    const res = await fetch(url, { cache: "no-store" });
+    const data = await res.json();
+    let tempData = data.effect_entries;
+
+    for (let i = 0; i < tempData.length; i++) {
+      if (tempData[i].language.name === "en") {
+        tempData = tempData[i].effect;
+        break;
+      }
+    }
+
+    for (let i = 0; i < tempData.length; i++) {
+      if (tempData[i] === "") {
+        tempData = tempData.slice(0, i) + " " + tempData.slice(i + 1);
+      }
+    }
+    return tempData;
+  };
+
+  const getAbilityData = async (abilities: any) => {
+    let abilityArray: Ability[] = [];
+    for (let i = 0; i < abilities.length; i++) {
+      let description = await getDescription(abilities[i].ability.url);
+      abilityArray.push({
+        name: abilities[i].ability.name,
+        is_hidden: abilities[i].is_hidden,
+        description: description,
+      });
+    }
+    return abilityArray;
+  };
+
   async function getData(id: number) {
     const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`, {
       cache: "no-store",
@@ -97,6 +136,7 @@ const PokemonDetail = async ({ params }: { params: { id: number } }) => {
 
   const pokemon = await getData(params.id);
   const pokemonSpecies = await getSpeciesData(pokemon.species.url);
+  const abilities = await getAbilityData(pokemon.abilities);
 
   function getPokemonStatus() {
     if (pokemonSpecies.is_legendary != false) {
@@ -326,6 +366,7 @@ const PokemonDetail = async ({ params }: { params: { id: number } }) => {
               <PokemonDetailContainer
                 pokemon={pokemon}
                 species={pokemonSpecies}
+                abilities={abilities}
                 lightColor={lightColor}
                 darkColor={darkColor}
               ></PokemonDetailContainer>

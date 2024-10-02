@@ -2,10 +2,12 @@ import React from "react";
 import styles from "./About.module.css";
 import PlayButton from "./PlayButton";
 import PauseButton from "./PauseButton";
-import { get } from "http";
-interface ability {
+import AboutAbilities from "./AboutAbilities";
+
+interface Ability {
   name: string;
   is_hidden: boolean;
+  description: string;
 }
 
 interface variety {
@@ -16,7 +18,7 @@ interface PokemonDetailAboutProps {
   flavorText: string;
   height: number;
   weight: number;
-  abilities: ability[];
+  abilities: Ability[];
   cries: string[];
   eggGroups: string[];
   shape: string;
@@ -63,7 +65,6 @@ const DetailAbout = ({
     return genderRate;
   }
 
-  console.log(getGenderRate(1));
   return (
     <>
       {/* description */}
@@ -229,14 +230,8 @@ const DetailAbout = ({
             </table>
           </div>
         </div>
-        <div className="">
-          <div className="font-bold mb-2">Abilities</div>
-          <a
-            className={`my-2 py-3 px-6 rounded-2xl flex flex-row justify-between items-center ${styles.box} w-full`}
-            href=""
-          >
-            {abilities[0].name}
-          </a>
+        <div className="flex flex-col">
+          <AboutAbilities abilities={abilities} darkColor={darkColor} />
         </div>
       </div>
       {/* abilities */}

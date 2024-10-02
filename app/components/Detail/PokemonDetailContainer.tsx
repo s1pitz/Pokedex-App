@@ -6,16 +6,17 @@ import DetailBaseStats from "./Evolution/DetailEvolution";
 import DetailEvolution from "./BaseStats/DetailBaseStats";
 import DetailMoves from "./Moves/DetailMoves";
 
+interface ability {
+  name: string;
+  is_hidden: boolean;
+  description: string;
+}
 interface PokemonDetailContainerProps {
   pokemon: any;
   species: any;
   lightColor: string;
   darkColor: string;
-}
-
-interface ability {
-  name: string;
-  is_hidden: boolean;
+  abilities: ability[];
 }
 
 interface variety {
@@ -29,6 +30,7 @@ const PokemonDetailContainer: React.FC<PokemonDetailContainerProps> = ({
   species,
   lightColor,
   darkColor,
+  abilities,
 }: PokemonDetailContainerProps) => {
   const [nav, setNav] = React.useState("About");
 
@@ -84,17 +86,6 @@ const PokemonDetailContainer: React.FC<PokemonDetailContainerProps> = ({
       eggGroupsArray.push(eggGroups[i].name);
     }
     return eggGroupsArray;
-  }
-
-  function getAbilities(abilities: any) {
-    let AbilityArray: ability[] = [];
-    for (let i = 0; i < abilities.length; i++) {
-      AbilityArray.push({
-        name: abilities[i].ability.name,
-        is_hidden: abilities[i].is_hidden,
-      });
-    }
-    return AbilityArray;
   }
 
   function getVarieties(varieties: any) {
@@ -223,7 +214,7 @@ const PokemonDetailContainer: React.FC<PokemonDetailContainerProps> = ({
             weight={pokemon.weight}
             height={pokemon.height}
             shape={species.shape.name}
-            abilities={getAbilities(pokemon.abilities)}
+            abilities={abilities}
             varieties={getVarieties(species.varieties)}
             cries={getCries(pokemon.cries)}
             eggGroups={getEggs(species.egg_groups)}
